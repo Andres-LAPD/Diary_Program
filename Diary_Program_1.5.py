@@ -9,13 +9,23 @@
 """
 
 #Imports
+import os
 import datetime as DT
 
-#Create files
+# Get the current directory where the script is located
+current_directory = os.path.dirname(os.path.abspath(__file__))
+
+# Create files
 def create_files():
+    diary_directory = os.path.join(current_directory, 'Diary')
+    if not os.path.exists(diary_directory):
+        os.makedirs(diary_directory)
+
     file_name = input("Enter entry name: ")
     file_name += "_" + DT.datetime.now().strftime("%d.%m.%y_%H.%M.%S") + ".txt"
-    with open(file_name, "w") as new_file:
+    file_path = os.path.join(diary_directory, file_name)
+
+    with open(file_path, "w") as new_file:
         print("Type END FILE to exit when done.")
         while True:
             text = input()
@@ -23,16 +33,19 @@ def create_files():
                 break
             new_file.write(text + "\n")
 
-#Open to read files
+# Open to read files
 def read_files():
     file_name = input("Enter entry name: ")
+    diary_directory = os.path.join(current_directory, 'Diary')
+    file_path = os.path.join(diary_directory, file_name)
+    
     try:
-        with open(file_name, "r") as read_file:
+        with open(file_path, "r") as read_file:
             print(read_file.read())
     except FileNotFoundError:
         print("Entry not found.")
 
-#Menu
+# Menu
 while True:
     print("1. Create new entry.")
     print("2. Read entry.")
